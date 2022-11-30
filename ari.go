@@ -116,6 +116,18 @@ func (l *ArrayList[e]) Map(
 	return newList
 }
 
+// MapBy(function func() (string,any)) returns a hash map of entities using given property
+func (l *ArrayList[e]) MapBy(
+	mapper func(e) (string, e),
+) map[string]e {
+	m := make(map[string]e)
+	for i := range l.elems {
+		key, value := mapper(l.elems[i])
+		m[key] = value
+	}
+	return m
+}
+
 // Filter(function func(any) bool) returns a new list
 // containing only the elements that satisfy the given function
 func (l *ArrayList[e]) Filter(

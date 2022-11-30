@@ -17,6 +17,7 @@ Golang Implementation of the JavaScript [Array](https://developer.mozilla.org/en
 |`IsEmpty()`|Determines whether an array is empty|N/A|`bool`|
 |`IsNotEmpty()`|Determines whether an array is not empty|N/A|`bool`|
 |`Map()`| returns a new list contianing the results of applying the given function|`func(interface{}) interface{}`|`*ArrayList`|
+|`MapBy()`| returns a hash map of the list using the provided string as key|`func(func(interface{})(string,interface())map[string]interface)`|map[string]interface{}|
 |`Peek()`|Returns the last element in the array|N/A|`interface{}`|
 |`PeekFirst()`|Returns the first element in the array|N/A|`interface{}`|
 |`PeekLast()`|Returns the last element in the array|N/A|`interface{}`|
