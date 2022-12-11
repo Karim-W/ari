@@ -315,3 +315,59 @@ func Reduce[T, M any](s []T, f func(M, T) M, initValue M) M {
 	}
 	return acc
 }
+
+// ToMapString returns a map[string]e from the list
+// where the key is the result of the PrimaryKeyExtractor function given as parameter
+func (l *ArrayList[e]) ToMapString(
+	PrimaryKeyExtractor func(e) string,
+) map[string]e {
+	m := make(map[string]e)
+	for i := range l.elems {
+		m[PrimaryKeyExtractor(l.elems[i])] = l.elems[i]
+	}
+	return m
+}
+
+// ToChainedMapString returns a map[string][]e from the list
+// where the key is the result of the PrimaryKeyExtractor function given as parameter
+func (l *ArrayList[e]) ToChainedMapString(
+	PrimaryKeyExtractor func(e) string,
+) map[string][]e {
+	m := make(map[string][]e)
+	for i := range l.elems {
+		key := PrimaryKeyExtractor(l.elems[i])
+		if _, ok := m[key]; !ok {
+			m[key] = []e{}
+		}
+		m[key] = append(m[key], l.elems[i])
+	}
+	return m
+}
+
+// Reduce(function func(any,any) any, initial any) returns the result
+func (l *ArrayList[e]) Reduce(
+	callback func(acc e, elem e) e,
+	initial e,
+) e {
+	acc := initial
+	for i := range l.elems {
+		acc = callback(acc, l.elems[i])
+	}
+	return acc
+}
+
+// InitFromSlice(s []T) returns a new ArrayList[T] from the given slice
+func InitFromSlice[T any](s []T) *ArrayList[T] {
+	return &ArrayList[T]{
+		elems: s,
+	}
+}
+
+// InitFromHashMap[K, V any](m map[string]V) returns a new ArrayList[V] from the given map
+func InitFromHashMap[K, V any](m map[string]V) *ArrayList[V] {
+	list := &ArrayList[V]{}
+	for _, v := range m {
+		list.Add(v)
+	}
+	return list
+}
